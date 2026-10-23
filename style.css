@@ -1,0 +1,944 @@
+/* ==========================================================================
+   GOTODO // EXECUTIVE CALENDAR & AGENDA
+   Aesthetic: ZARA Editorial Luxury Minimalism / Cold High-Fashion
+   Theme: Pure Black (#000000)
+   Main Accent: Fluorescent Green (#00FF66) -> Buttons, Today Highlight, Checkbox
+   Second Accent: Hot Pink (#FF007F) -> Strict Urgent Priority Exclusivity
+   ========================================================================== */
+
+:root {
+  --bg-pure: #000000;
+  --bg-surface: #070707;
+  --bg-card: #0d0d0d;
+  --bg-elevated: #141414;
+  
+  --border-subtle: #1c1c1c;
+  --border-medium: #282828;
+  --border-sharp: #363636;
+
+  --text-primary: #FFFFFF;
+  --text-secondary: #9E9E9E;
+  --text-muted: #555555;
+  --text-dim: #333333;
+
+  /* Primary Accent: Fluorescent Green */
+  --accent-green: #00FF66;
+  --accent-green-dim: rgba(0, 255, 102, 0.12);
+  --accent-green-glow: rgba(0, 255, 102, 0.35);
+  --accent-green-border: rgba(0, 255, 102, 0.6);
+
+  /* Secondary Accent: Hot Pink (Strictly Urgent only) */
+  --accent-pink: #FF007F;
+  --accent-pink-dim: rgba(255, 0, 127, 0.12);
+  --accent-pink-glow: rgba(255, 0, 127, 0.4);
+  --accent-pink-border: rgba(255, 0, 127, 0.7);
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  --font-editorial: 'Cinzel', 'Times New Roman', serif;
+
+  --transition-fast: 0.15s cubic-bezier(0.2, 0, 0, 1);
+  --transition-smooth: 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Reset & Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-pure);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  letter-spacing: -0.01em;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* App Layout */
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-pure);
+}
+
+/* ==========================================================================
+   Header (ZARA High-Fashion Monospace Editorial)
+   ========================================================================== */
+.app-header {
+  height: 64px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.brand-zone {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.brand-title {
+  font-family: var(--font-editorial);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--text-primary);
+  text-transform: uppercase;
+}
+
+.brand-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.18em;
+  font-weight: 500;
+}
+
+.header-center {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-mono);
+}
+
+.live-clock {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.12em;
+}
+
+.live-date {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-left: 1px solid var(--border-subtle);
+  padding-left: 16px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+}
+
+/* Today Jump Button (Fluorescent Green Accent) */
+.btn-today-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--accent-green);
+  border: 1px solid var(--accent-green);
+  padding: 8px 18px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-radius: 0;
+}
+
+.btn-today-nav:hover {
+  background: var(--accent-green);
+  color: #000000;
+  box-shadow: 0 0 16px var(--accent-green-glow);
+}
+
+.pulse-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent-green);
+  box-shadow: 0 0 6px var(--accent-green);
+  animation: pulseNeon 2s infinite ease-in-out;
+}
+
+@keyframes pulseNeon {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.75); }
+}
+
+/* ==========================================================================
+   Main Two-Column Workspace
+   ========================================================================== */
+.main-content {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 460px 1fr;
+  min-height: calc(100vh - 64px);
+}
+
+/* ==========================================================================
+   Left Panel: Calendar
+   ========================================================================== */
+.calendar-panel {
+  border-right: 1px solid var(--border-subtle);
+  background-color: var(--bg-pure);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.month-title-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.month-year-sub {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.2em;
+}
+
+.month-name-main {
+  font-family: var(--font-editorial);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--text-primary);
+  margin-top: 2px;
+}
+
+.calendar-nav-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.cal-nav-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.cal-nav-btn:hover {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-color: var(--border-medium);
+}
+
+/* Calendar Weekdays */
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 10px;
+}
+
+.calendar-weekdays span {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.14em;
+}
+
+/* Calendar Grid */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  flex: 1;
+}
+
+/* Calendar Date Cell */
+.cal-cell {
+  aspect-ratio: 1 / 1;
+  border: 1px solid transparent;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.cal-cell-num {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.cal-cell:hover {
+  background-color: var(--bg-card);
+  border-color: var(--border-subtle);
+}
+
+.cal-cell:hover .cal-cell-num {
+  color: var(--text-primary);
+}
+
+/* Other Month Padding Days */
+.cal-cell.is-other-month {
+  opacity: 0.22;
+}
+
+.cal-cell.is-other-month .cal-cell-num {
+  color: var(--text-muted);
+}
+
+/* Selected Cell (Active Date) */
+.cal-cell.is-selected {
+  background-color: #1a1a1a;
+  border-color: #ffffff;
+}
+
+.cal-cell.is-selected .cal-cell-num {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* TODAY DATE (Always Highlighted in Fluorescent Green) */
+.cal-cell.is-today {
+  border: 1px solid var(--accent-green) !important;
+  box-shadow: inset 0 0 10px var(--accent-green-dim);
+}
+
+.cal-cell.is-today .cal-cell-num {
+  color: var(--accent-green);
+  font-weight: 700;
+}
+
+.cal-cell.is-today::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 4px;
+  height: 4px;
+  background-color: var(--accent-green);
+  border-radius: 50%;
+  box-shadow: 0 0 5px var(--accent-green);
+}
+
+/* Task Indicator Dots on Calendar */
+.cell-dots-row {
+  display: flex;
+  gap: 3px;
+  position: absolute;
+  bottom: 6px;
+  height: 4px;
+  align-items: center;
+}
+
+.cal-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+}
+
+.cal-dot.dot-normal {
+  background-color: var(--accent-green);
+  box-shadow: 0 0 4px var(--accent-green);
+}
+
+.cal-dot.dot-urgent {
+  background-color: var(--accent-pink);
+  box-shadow: 0 0 5px var(--accent-pink);
+}
+
+/* Calendar Legend */
+.calendar-legend {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-mark.mark-today {
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--accent-green);
+  box-shadow: 0 0 4px var(--accent-green-glow);
+}
+
+.legend-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+/* ==========================================================================
+   Right Panel: Daily Agenda & Quick Desk
+   ========================================================================== */
+.agenda-panel {
+  background-color: var(--bg-pure);
+  padding: 32px 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.agenda-panel-header {
+  margin-bottom: 20px;
+}
+
+.selected-tag-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.agenda-caption {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.22em;
+}
+
+/* Today Badge */
+.today-badge {
+  display: none;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  background-color: var(--accent-green);
+  color: #000000;
+  padding: 2px 7px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.today-badge.is-visible {
+  display: inline-block;
+}
+
+.selected-date-title {
+  font-family: var(--font-editorial);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-primary);
+  text-transform: uppercase;
+}
+
+.agenda-metric {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: var(--font-mono);
+}
+
+.metric-count {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.05em;
+}
+
+.metric-label {
+  font-size: 9px;
+  color: var(--text-muted);
+  letter-spacing: 0.2em;
+  margin-top: 2px;
+}
+
+/* Slim Progress Bar */
+.progress-track {
+  width: 100%;
+  height: 2px;
+  background-color: var(--border-subtle);
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: var(--accent-green);
+  box-shadow: 0 0 10px var(--accent-green);
+  transition: width var(--transition-smooth);
+}
+
+/* ==========================================================================
+   Fast Task Input Form (Optimized for 30s Quick Add)
+   ========================================================================== */
+.task-input-box {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-medium);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 28px;
+  transition: border-color var(--transition-fast);
+}
+
+.task-input-box:focus-within {
+  border-color: var(--text-primary);
+}
+
+.input-main-wrap {
+  width: 100%;
+}
+
+.task-input-field {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.task-input-field::placeholder {
+  color: var(--text-muted);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+.input-options-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 12px;
+}
+
+/* Priority Selector Pills */
+.priority-selector {
+  display: flex;
+  gap: 6px;
+}
+
+.priority-label {
+  cursor: pointer;
+}
+
+.priority-label input[type="radio"] {
+  display: none;
+}
+
+.priority-pill {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  padding: 6px 12px;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  background: transparent;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+/* Normal pill checked */
+.priority-label.is-normal input:checked + .priority-pill {
+  color: var(--text-primary);
+  border-color: var(--text-primary);
+  background-color: #1a1a1a;
+}
+
+/* Low pill checked */
+.priority-label.is-low input:checked + .priority-pill {
+  color: var(--text-secondary);
+  border-color: var(--text-secondary);
+  background-color: #141414;
+}
+
+/* URGENT PRIORITY (Strict Hot Pink Exclusivity) */
+.priority-label.is-urgent .priority-pill {
+  color: rgba(255, 0, 127, 0.7);
+  border-color: rgba(255, 0, 127, 0.3);
+}
+
+.priority-label.is-urgent input:checked + .priority-pill {
+  color: #FFFFFF;
+  background-color: var(--accent-pink);
+  border-color: var(--accent-pink);
+  box-shadow: 0 0 14px var(--accent-pink-glow);
+  font-weight: 700;
+}
+
+/* Main Action Button (Fluorescent Green) */
+.btn-add-task {
+  background-color: var(--accent-green);
+  color: #000000;
+  border: 1px solid var(--accent-green);
+  padding: 7px 22px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-add-task:hover {
+  background-color: #1aff75;
+  box-shadow: 0 0 18px var(--accent-green-glow);
+  transform: translateY(-1px);
+}
+
+.btn-add-task:active {
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   Tasks List & Item Architecture
+   ========================================================================== */
+.tasks-scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 6px;
+  min-height: 280px;
+}
+
+.tasks-scroll-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.tasks-scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tasks-scroll-container::-webkit-scrollbar-thumb {
+  background: var(--border-medium);
+}
+
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Task Item */
+.task-item {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  transition: all var(--transition-fast);
+}
+
+.task-item:hover {
+  border-color: var(--border-medium);
+  background-color: var(--bg-card);
+}
+
+/* Specific styling for Urgent Task */
+.task-item.priority-urgent {
+  border-left: 2px solid var(--accent-pink);
+}
+
+.task-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Custom Checkbox (Fluorescent Green Accent) */
+.task-checkbox-wrap {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.task-checkbox-wrap input[type="checkbox"] {
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.custom-checkbox {
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--border-sharp);
+  background-color: var(--bg-pure);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.task-checkbox-wrap:hover .custom-checkbox {
+  border-color: var(--accent-green);
+}
+
+.custom-checkbox svg {
+  display: none;
+  stroke: #000000;
+  stroke-width: 3;
+}
+
+/* Checked State: Fluorescent Green Fill */
+.task-checkbox-wrap input[type="checkbox"]:checked + .custom-checkbox {
+  background-color: var(--accent-green);
+  border-color: var(--accent-green);
+  box-shadow: 0 0 10px var(--accent-green-glow);
+}
+
+.task-checkbox-wrap input[type="checkbox"]:checked + .custom-checkbox svg {
+  display: block;
+}
+
+/* Task Text & Details */
+.task-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.task-text {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-primary);
+  word-break: break-word;
+  transition: all var(--transition-fast);
+}
+
+/* Priority Badges inside task item */
+.task-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.task-priority-badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  padding: 3px 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* URGENT PRIORITY BADGE (Strict Hot Pink) */
+.badge-urgent {
+  color: var(--accent-pink);
+  border: 1px solid var(--accent-pink);
+  background-color: var(--accent-pink-dim);
+}
+
+.badge-normal {
+  color: var(--text-secondary);
+  border: 1px solid var(--border-medium);
+  background-color: transparent;
+}
+
+.badge-low {
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+  background-color: transparent;
+}
+
+/* Delete Button */
+.btn-delete-task {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition-fast);
+}
+
+.task-item:hover .btn-delete-task {
+  color: var(--text-muted);
+}
+
+.btn-delete-task:hover {
+  color: #ff4757 !important;
+}
+
+/* ==========================================================================
+   Completed Task State: Strikethrough & Opacity Dimming (완료된 할일)
+   ========================================================================== */
+.task-item.is-completed {
+  opacity: 0.35;
+  background-color: #050505;
+}
+
+.task-item.is-completed .task-text {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.task-item.is-completed.priority-urgent {
+  border-left-color: var(--border-subtle);
+}
+
+.task-item.is-completed .badge-urgent {
+  opacity: 0.5;
+  box-shadow: none;
+}
+
+/* Empty State */
+.tasks-empty-state {
+  padding: 60px 20px;
+  text-align: center;
+  border: 1px dashed var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-title {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.empty-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Footer Action Bar */
+.agenda-footer {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-tip {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.btn-clear-completed {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-clear-completed:hover {
+  color: var(--text-primary);
+  border-color: var(--border-medium);
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+@media (max-width: 992px) {
+  .main-content {
+    grid-template-columns: 1fr;
+  }
+
+  .calendar-panel {
+    border-right: none;
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 24px;
+  }
+
+  .agenda-panel {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-header {
+    padding: 0 16px;
+    height: 56px;
+  }
+
+  .brand-sub, .live-date {
+    display: none;
+  }
+
+  .selected-date-title {
+    font-size: 24px;
+  }
+
+  .input-options-wrap {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .btn-add-task {
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+  }
+}

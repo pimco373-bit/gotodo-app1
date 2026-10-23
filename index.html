@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GOTODO // EXECUTIVE CALENDAR & AGENDA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Top Editorial Header -->
+    <header class="app-header">
+      <div class="brand-zone">
+        <span class="brand-title">GOTODO</span>
+        <span class="brand-sub">EDITION // WORKPLACE AGENDA</span>
+      </div>
+      <div class="header-center">
+        <div class="live-clock" id="liveClock">00:00:00</div>
+        <div class="live-date" id="liveDate">OCTOBER 23, 2026</div>
+      </div>
+      <div class="header-actions">
+        <button type="button" class="btn-today-nav" id="btnHeaderToday">
+          <span class="pulse-indicator"></span>
+          TODAY JUMP
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="main-content">
+      <!-- Left: Monthly Calendar Section -->
+      <section class="calendar-panel" aria-label="Monthly Calendar">
+        <div class="panel-header calendar-panel-header">
+          <div class="month-title-wrap">
+            <span class="month-year-sub" id="calendarYearDisplay">2026</span>
+            <h2 class="month-name-main" id="calendarMonthDisplay">OCTOBER</h2>
+          </div>
+          <div class="calendar-nav-controls">
+            <button type="button" class="cal-nav-btn" id="prevMonthBtn" title="Previous Month" aria-label="Previous Month">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <button type="button" class="cal-nav-btn" id="nextMonthBtn" title="Next Month" aria-label="Next Month">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="calendar-weekdays" id="calendarWeekdays">
+          <span>MON</span>
+          <span>TUE</span>
+          <span>WED</span>
+          <span>THU</span>
+          <span>FRI</span>
+          <span>SAT</span>
+          <span>SUN</span>
+        </div>
+
+        <div class="calendar-grid" id="calendarGrid">
+          <!-- Calendar date cells rendered via app.js -->
+        </div>
+
+        <!-- Legend / Info Strip -->
+        <div class="calendar-legend">
+          <div class="legend-item">
+            <span class="legend-mark mark-today"></span>
+            <span>TODAY (항상 강조)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot dot-normal"></span>
+            <span>할 일 있음</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot dot-urgent"></span>
+            <span>긴급 건 포함</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: Daily Tasks & Action Desk -->
+      <section class="agenda-panel" aria-label="Daily Agenda and Tasks">
+        <div class="panel-header agenda-panel-header">
+          <div class="selected-date-info">
+            <div class="selected-tag-row">
+              <span class="agenda-caption">DAILY AGENDA</span>
+              <span class="today-badge" id="selectedTodayBadge">TODAY</span>
+            </div>
+            <h1 class="selected-date-title" id="selectedDateDisplay">2026. 10. 23 FRI</h1>
+          </div>
+          <div class="agenda-metric">
+            <span class="metric-count" id="taskMetricCount">0 / 0</span>
+            <span class="metric-label">COMPLETED</span>
+          </div>
+        </div>
+
+        <!-- Slim Progress Bar -->
+        <div class="progress-track">
+          <div class="progress-bar" id="taskProgressBar" style="width: 0%;"></div>
+        </div>
+
+        <!-- Fast Task Input Bar (Optimized for 30-sec workflow) -->
+        <form class="task-input-box" id="taskForm">
+          <div class="input-main-wrap">
+            <input 
+              type="text" 
+              id="taskTextInput" 
+              class="task-input-field" 
+              placeholder="30초 안에 끝낼 업무를 입력하세요 (Enter로 등록)" 
+              autocomplete="off"
+              required
+            >
+          </div>
+          <div class="input-options-wrap">
+            <div class="priority-selector" id="prioritySelector" role="radiogroup" aria-label="Priority Selection">
+              <label class="priority-label is-urgent">
+                <input type="radio" name="priority" value="urgent">
+                <span class="priority-pill pill-urgent">긴급 URGENT</span>
+              </label>
+              <label class="priority-label is-normal">
+                <input type="radio" name="priority" value="normal" checked>
+                <span class="priority-pill pill-normal">보통 NORMAL</span>
+              </label>
+              <label class="priority-label is-low">
+                <input type="radio" name="priority" value="low">
+                <span class="priority-pill pill-low">낮음 LOW</span>
+              </label>
+            </div>
+            <button type="submit" class="btn-add-task" id="btnAddTask">
+              <span class="btn-add-text">ADD +</span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Tasks List Container -->
+        <div class="tasks-scroll-container">
+          <div class="tasks-list" id="tasksList">
+            <!-- Rendered by app.js -->
+          </div>
+          <div class="tasks-empty-state" id="tasksEmptyState" style="display: none;">
+            <p class="empty-title">NO TASKS ASSIGNED</p>
+            <p class="empty-sub">선택된 날짜에 등록된 업무가 없습니다. 상단에서 빠르게 추가하세요.</p>
+          </div>
+        </div>
+
+        <!-- Quick Focus Bar -->
+        <footer class="agenda-footer">
+          <span class="footer-tip">TIP: Enter 키로 빠른 추가 | 체크박스 클릭으로 즉시 완료</span>
+          <button type="button" class="btn-clear-completed" id="btnClearCompleted" title="완료된 할 일 정리">
+            CLEAR COMPLETED
+          </button>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
