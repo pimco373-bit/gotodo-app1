@@ -22,6 +22,10 @@
         <div class="live-date" id="liveDate">OCTOBER 23, 2026</div>
       </div>
       <div class="header-actions">
+        <div class="cloud-status-badge" id="cloudStatusBadge" title="Firestore 실시간 동기화 상태 (클릭 시 상세 안내)">
+          <span class="cloud-status-dot" id="cloudStatusDot"></span>
+          <span class="cloud-status-text" id="cloudStatusText">FIRESTORE INIT</span>
+        </div>
         <button type="button" class="btn-today-nav" id="btnHeaderToday">
           <span class="pulse-indicator"></span>
           TODAY JUMP
@@ -159,6 +163,38 @@
     </main>
   </div>
 
-  <script src="app.js"></script>
+  <!-- Firestore Rules Guidance Modal -->
+  <div class="rules-modal-backdrop" id="rulesModalBackdrop" style="display: none;">
+    <div class="rules-modal-card">
+      <div class="rules-modal-header">
+        <span class="rules-modal-tag">FIRESTORE GUIDE</span>
+        <button type="button" class="btn-close-modal" id="btnCloseRulesModal" aria-label="Close modal">&times;</button>
+      </div>
+      <h3 class="rules-modal-title">FIRESTORE 데이터베이스 권한 안내</h3>
+      <p class="rules-modal-desc">
+        Firebase 콘솔에서 새로 생성된 Firestore 데이터베이스는 기본적으로 보안을 위해 모든 읽기/쓰기가 차단되어 있습니다.
+        데이터를 정상적으로 클라우드에 저장하고 실시간 동기화하려면 규칙을 변경해야 합니다.
+      </p>
+      <div class="rules-code-block">
+        <div class="rules-code-header">Firestore Security Rules (콘솔 규칙 탭에 입력)</div>
+        <pre><code>rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}</code></pre>
+      </div>
+      <div class="rules-modal-actions">
+        <a href="https://console.firebase.google.com/project/gotodo-app1/firestore/rules" target="_blank" rel="noopener noreferrer" class="btn-open-console">
+          FIREBASE CONSOLE 규칙 열기 &rarr;
+        </a>
+        <button type="button" class="btn-modal-confirm" id="btnConfirmRulesModal">확인 (닫기)</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
 </body>
 </html>

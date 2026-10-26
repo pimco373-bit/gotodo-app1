@@ -23,16 +23,39 @@
 4. **초고속 할 일 등록**: 제목 입력 + 3단계 우선순위(긴급 / 보통 / 낮음) 선택 후 `Enter` 즉시 등록.
 5. **완료 상태 시각화**: 원클릭 체크 시 취소선(`line-through`) 및 투명도 35% 흐림 처리.
 6. **진행률 게이지**: 완료 건수 / 전체 건수 비율을 실시간 프로그레스 바로 시각화.
-7. **무설치 로컬 영속성**: 로그인/회원가입 및 외부 DB 없이 브라우저 `localStorage`에 자동 안전 보존.
+7. **Firebase Firestore 클라우드 실시간 동기화**:
+   - Google Firebase Firestore v13 모듈러 SDK 연동으로 실시간(`onSnapshot`) 다중 기기/탭 동기화 지원.
+   - 네트워크 단절이나 규칙 미설정 시에도 브라우저 `localStorage` 캐시를 통한 무중단 오프라인 모드 지원.
+   - 상단 헤더의 실시간 클라우드 상태 배지(`FIRESTORE SYNC: ACTIVE` / `RULES NEEDED`) 제공.
 
 ---
 
 ## ✦ 기술 스택 (Tech Stack)
-- **HTML5**
-- **CSS3** (Flexbox / CSS Grid / CSS Custom Properties)
-- **Vanilla JavaScript** (ES6+)
+- **Frontend**: HTML5, CSS3, Vanilla JavaScript (ES6+ Modules)
+- **Database / Cloud**: Google Firebase Firestore (SDK v13.1.0)
+- **Persistence**: Firebase Firestore + LocalStorage Hybrid Fallback Cache
+
+---
+
+## ✦ Firebase Firestore 규칙 설정 안내 (중요)
+Firebase 콘솔에서 데이터베이스를 처음 생성하셨다면 읽기/쓰기 권한을 허용해야 클라우드 저장이 작동합니다:
+
+1. [Firebase Console](https://console.firebase.google.com/project/gotodo-app1/firestore/rules) 접속
+2. **Firestore Database > 규칙(Rules)** 탭 선택
+3. 아래 규칙으로 설정 후 **[게시(Publish)]** 클릭:
+
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
+```
 
 ---
 
 ## ✦ 실행 방법
-별도의 빌드 과정 없이 `index.html` 파일을 더블 클릭하여 웹 브라우저에서 바로 실행할 수 있습니다.
+별도의 빌드 과정 없이 `index.html` 파일을 웹 브라우저 또는 로컬 웹 서버(Live Server 등)에서 바로 실행할 수 있습니다.
